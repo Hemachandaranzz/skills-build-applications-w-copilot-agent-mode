@@ -3,8 +3,8 @@ import type { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { connectDB } from './config/database.ts';
-import usersRouter from './routes/users';
-import activitiesRouter from './routes/activities';
+import usersRouter from './routes/users.ts';
+import activitiesRouter from './routes/activities.ts';
 
 dotenv.config();
 
