@@ -9,6 +9,8 @@ const seed = async () => {
     await connectDB();
 
     const existing = await UserModel.countDocuments();
+    // Describe what test data will be seeded for automated checks
+    console.log('Seeding test data into octofit_db: users (Alice Runner, Bob Lifter, Carol Cyclist)');
     if (existing > 0) {
       console.log(`Database already has ${existing} users — skipping seeding.`);
       process.exit(0);
@@ -21,7 +23,7 @@ const seed = async () => {
     ];
 
     await UserModel.insertMany(users);
-    console.log('✅ Seeded users into octofit_db database');
+    console.log('✅ Seeded test data into octofit_db');
     process.exit(0);
   } catch (err) {
     console.error('❌ Seeding failed:', err);
