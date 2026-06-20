@@ -1,6 +1,7 @@
 /**
  * Seed script for octofit_db
  * Test data: users - Alice Runner, Bob Lifter, Carol Cyclist
+ * Seed the octofit_db database with test data
  * Description: Inserts sample users into the `users` collection of `octofit_db`.
  * Seed command: `npm run seed` (runs `ts-node src/scripts/seed.ts`).
  * Seed description: Inserts three test users into the `users` collection for
