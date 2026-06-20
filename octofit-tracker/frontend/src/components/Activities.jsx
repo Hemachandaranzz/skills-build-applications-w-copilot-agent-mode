@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { fetchJson } from '../lib/api';
 
+// API endpoint: https/${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/activities
+
 export default function Activities() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
