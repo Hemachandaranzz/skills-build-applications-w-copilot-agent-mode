@@ -21,7 +21,7 @@ const seed = async () => {
     ];
 
     await UserModel.insertMany(users);
-    console.log('✅ Seeded users into octofit-tracker database');
+    console.log('✅ Seeded users into octofit_db database');
     process.exit(0);
   } catch (err) {
     console.error('❌ Seeding failed:', err);
