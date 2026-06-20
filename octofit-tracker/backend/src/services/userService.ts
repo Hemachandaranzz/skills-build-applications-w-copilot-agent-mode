@@ -1,5 +1,5 @@
-import UserModel from '../models/user';
-import type { IUser } from '../models/user';
+import UserModel from '../models/user.ts';
+import type { IUser } from '../models/user.ts';
 
 class UserService {
   async create(data: { name: string; email: string }): Promise<IUser> {
