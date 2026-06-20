@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import { connectDB } from './config/database.ts';
 import usersRouter from './routes/users.ts';
 import activitiesRouter from './routes/activities.ts';
+import { seedDB } from './scripts/seed.ts';
 
 dotenv.config();
 
@@ -35,8 +36,14 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Connect to MongoDB
-connectDB();
+// Connect to MongoDB (await so we can optionally seed after connection)
+await connectDB();
+
+// Optionally seed the DB at startup when in-memory MongoDB is used or when requested
+const shouldSeedOnStart = process.env.USE_IN_MEMORY_MONGO === 'true' || process.env.SEED_ON_START === 'true';
+if (shouldSeedOnStart) {
+  seedDB().catch((err) => console.error('Seeding at startup failed:', err));
+}
 
 // Basic routes
 app.get('/api/health', (req: Request, res: Response) => {

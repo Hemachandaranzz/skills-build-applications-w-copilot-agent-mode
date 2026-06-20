@@ -13,7 +13,8 @@ import UserModel from '../models/user.ts';
 
 dotenv.config();
 
-const seed = async () => {
+
+export const seedDB = async () => {
   try {
     await connectDB();
 
@@ -24,7 +25,7 @@ const seed = async () => {
     console.log('SEED COMMAND: npm run seed  (ts-node src/scripts/seed.ts)');
     if (existing > 0) {
       console.log(`Database already has ${existing} users — skipping seeding.`);
-      process.exit(0);
+      return;
     }
 
     const users = [
@@ -35,11 +36,15 @@ const seed = async () => {
 
     await UserModel.insertMany(users);
     console.log('✅ Seeded test data into octofit_db');
-    process.exit(0);
   } catch (err) {
     console.error('❌ Seeding failed:', err);
-    process.exit(1);
+    throw err;
   }
 };
 
-seed();
+// If run directly from the command line, execute the seeding and exit.
+if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith('seed.ts')) {
+  seedDB()
+    .then(() => process.exit(0))
+    .catch(() => process.exit(1));
+}
