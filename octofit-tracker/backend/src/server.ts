@@ -2,16 +2,36 @@ import express from 'express';
 import type { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { connectDB } from './config/database';
-import usersRouter from './routes/users';
+import { connectDB } from './config/database.ts';
+import usersRouter from './routes/users.ts';
+import activitiesRouter from './routes/activities.ts';
 
 dotenv.config();
 
 const app: Application = express();
-const PORT = process.env.PORT || 8000;
+const PORT = Number(process.env.PORT || 8000);
+
+// Build API base URL for Codespaces when available
+const CODESPACE_NAME = process.env.CODESPACE_NAME;
+const API_BASE_URL = CODESPACE_NAME
+  ? `https://${CODESPACE_NAME}-8000.app.github.dev`
+  : `http://localhost:${PORT}`;
+
+console.log(`API base URL: ${API_BASE_URL}`);
 
 // Middleware
-app.use(cors());
+// Configure CORS to allow Codespaces URL and localhost dev origin
+const allowedOrigins = [API_BASE_URL, `http://localhost:5173`, `http://127.0.0.1:5173`];
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // allow requests with no origin (like curl, Postman)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error('Not allowed by CORS'));
+    },
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -25,6 +45,7 @@ app.get('/api/health', (req: Request, res: Response) => {
 
 // Logic tier routes
 app.use('/api/users', usersRouter);
+app.use('/api/activities', activitiesRouter);
 
 // Error handler
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
@@ -33,6 +54,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Server is running on http://localhost:${PORT}`);
+const HOST = '0.0.0.0';
+app.listen(PORT, HOST, () => {
+  console.log(`🚀 Server is running on http://localhost:${PORT} (host ${HOST})`);
 });
