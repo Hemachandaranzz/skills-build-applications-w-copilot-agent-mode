@@ -14,3 +14,21 @@ The React Compiler is not enabled on this template because of its impact on dev 
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+## Codespaces configuration
+
+This project uses `VITE_CODESPACE_NAME` (available in GitHub Codespaces) to
+construct the API base URL when running in a Codespace. Define it locally in
+`.env.local` for preview environments (or when testing Codespaces-like URLs):
+
+```
+VITE_CODESPACE_NAME=your-codespace-name
+```
+
+The app builds API URLs like:
+
+```
+https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/<resource>/
+```
+
+If `VITE_CODESPACE_NAME` is not set the frontend falls back to `http://localhost:8000`.
